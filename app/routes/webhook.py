@@ -133,6 +133,9 @@ async def verify_webhook(
     return Response(status_code=status.HTTP_400_BAD_REQUEST, content="Missing parameters")
 
 
+PROCESSED_MESSAGE_IDS = set()
+
+
 @router.post("")
 async def receive_webhook(request: Request, db: AsyncSession = Depends(get_db)):
     """
@@ -152,6 +155,15 @@ async def receive_webhook(request: Request, db: AsyncSession = Depends(get_db)):
                 messages = value.get("messages", [])
                 
                 for message in messages:
+                    message_id = message.get("id")
+                    if message_id:
+                        if message_id in PROCESSED_MESSAGE_IDS:
+                            logger.info(f"Duplicate message {message_id} ignored.")
+                            continue
+                        PROCESSED_MESSAGE_IDS.add(message_id)
+                        if len(PROCESSED_MESSAGE_IDS) > 2000:
+                            PROCESSED_MESSAGE_IDS.pop()
+
                     sender_phone = message.get("from")
                     message_type = message.get("type")
                     

@@ -52,6 +52,83 @@ def parse_neighborhood(address: str, default_neighborhood: str) -> str:
     return default_neighborhood
 
 
+def generate_time_slots(now: datetime) -> list[dict]:
+    slots = []
+    
+    # 1. Today's slots
+    if now.hour < 17:
+        t1 = now.replace(hour=18, minute=0, second=0, microsecond=0)
+        slots.append({
+            "id": f"date_slot:{t1.isoformat()}",
+            "title": "Ce soir à 18:00 🌅",
+            "description": t1.strftime("%d/%m/%Y à 18h00")
+        })
+    if now.hour < 19:
+        t2 = now.replace(hour=20, minute=0, second=0, microsecond=0)
+        slots.append({
+            "id": f"date_slot:{t2.isoformat()}",
+            "title": "Ce soir à 20:00 🌃",
+            "description": t2.strftime("%d/%m/%Y à 20h00")
+        })
+        
+    # 2. Tomorrow's slots
+    tomorrow = now + timedelta(days=1)
+    t3 = tomorrow.replace(hour=18, minute=0, second=0, microsecond=0)
+    slots.append({
+        "id": f"date_slot:{t3.isoformat()}",
+        "title": "Demain à 18:00 🌅",
+        "description": t3.strftime("%d/%m/%Y à 18h00")
+    })
+    t4 = tomorrow.replace(hour=20, minute=0, second=0, microsecond=0)
+    slots.append({
+        "id": f"date_slot:{t4.isoformat()}",
+        "title": "Demain à 20:00 🌃",
+        "description": t4.strftime("%d/%m/%Y à 20h00")
+    })
+    
+    # 3. Next Saturday
+    days_to_sat = (5 - now.weekday()) % 7
+    if days_to_sat == 0 and now.hour >= 16:
+        days_to_sat = 7
+    sat = now + timedelta(days=days_to_sat)
+    
+    sat_10 = sat.replace(hour=10, minute=0, second=0, microsecond=0)
+    slots.append({
+        "id": f"date_slot:{sat_10.isoformat()}",
+        "title": f"Samedi à 10:00 ☀️",
+        "description": sat_10.strftime("%d/%m/%Y à 10h00")
+    })
+    
+    sat_17 = sat.replace(hour=17, minute=0, second=0, microsecond=0)
+    slots.append({
+        "id": f"date_slot:{sat_17.isoformat()}",
+        "title": f"Samedi à 17:00 🌆",
+        "description": sat_17.strftime("%d/%m/%Y à 17h00")
+    })
+
+    # 4. Next Sunday
+    days_to_sun = (6 - now.weekday()) % 7
+    if days_to_sun == 0 and now.hour >= 16:
+        days_to_sun = 7
+    sun = now + timedelta(days=days_to_sun)
+    
+    sun_16 = sun.replace(hour=16, minute=0, second=0, microsecond=0)
+    slots.append({
+        "id": f"date_slot:{sun_16.isoformat()}",
+        "title": f"Dimanche à 16:00 🌆",
+        "description": sun_16.strftime("%d/%m/%Y à 16h00")
+    })
+    
+    # 5. Manual option
+    slots.append({
+        "id": "date_slot_manual",
+        "title": "Saisir manuellement ✍️",
+        "description": "Saisir une date et heure personnalisées"
+    })
+    
+    return slots
+
+
 async def send_match_confirmation_prompt(db: AsyncSession, phone_number: str, temp_data: dict) -> None:
     sport = temp_data.get("sport")
     dt_parsed = datetime.fromisoformat(temp_data.get("match_time"))
@@ -107,9 +184,21 @@ async def handle_whatsapp_message(
                 # Start Match Creation state machine!
                 temp_data = {}
                 await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_SPORT", temp_data)
-                await whatsapp_service.send_text_message(
+                await whatsapp_service.send_interactive_list(
                     to=phone_number,
-                    text="⚽ *Organiser un match* 🏀\n\nQuel sport souhaitez-vous organiser ? (ex: Football, Basketball, Tennis)"
+                    text="⚽ *Organiser un match* 🏀\n\nQuel sport souhaitez-vous organiser ?",
+                    button_label="Choisir le sport",
+                    sections=[
+                        {
+                            "title": "Sports",
+                            "rows": [
+                                {"id": "sport_football", "title": "Football ⚽"},
+                                {"id": "sport_basketball", "title": "Basketball 🏀"},
+                                {"id": "sport_tennis", "title": "Tennis 🎾"},
+                                {"id": "sport_boxe", "title": "Boxe 🥊"}
+                            ]
+                        }
+                    ]
                 )
                 return
                 
@@ -190,28 +279,62 @@ async def handle_whatsapp_message(
             if not input_text:
                 await whatsapp_service.send_text_message(to=phone_number, text="S'il vous plaît, entrez le sport :")
                 return
-            temp_data["sport"] = input_text
+            sport_map = {
+                "sport_football": "Football",
+                "sport_basketball": "Basketball",
+                "sport_tennis": "Tennis",
+                "sport_boxe": "Boxe",
+            }
+            sport = sport_map.get(input_text.lower(), input_text.capitalize())
+            temp_data["sport"] = sport
             await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_DATE", temp_data)
-            await whatsapp_service.send_text_message(
+            
+            slots = generate_time_slots(datetime.now())
+            await whatsapp_service.send_interactive_list(
                 to=phone_number,
-                text="Quand aura lieu le match ? Précisez le jour et l'heure (ex: 22/06 à 18h, ou Samedi à 17:00) :"
+                text="Quand aura lieu le match ? 📅\n\nSélectionnez une option de date/heure ci-dessous ou choisissez de saisir une heure personnalisée.",
+                button_label="Choisir la date",
+                sections=[
+                    {
+                        "title": "Options proposées",
+                        "rows": slots
+                    }
+                ]
             )
             return
             
         elif current_step == "CREATE_MATCH_DATE":
             if not input_text:
-                await whatsapp_service.send_text_message(to=phone_number, text="S'il vous plaît, entrez la date/heure :")
+                await whatsapp_service.send_text_message(to=phone_number, text="S'il vous plaît, sélectionnez une date ou écrivez-la :")
                 return
-            parsed_dt = parse_date_input(input_text)
-            temp_data["match_time"] = parsed_dt.isoformat()
-            temp_data["match_time_text"] = input_text
+            
+            if input_text == "date_slot_manual":
+                await whatsapp_service.send_text_message(
+                    to=phone_number,
+                    text="Veuillez saisir le jour et l'heure manuellement (ex: 22/06 à 18h, ou Samedi à 17:00) : ✍️"
+                )
+                temp_data["waiting_for_manual_date"] = True
+                await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_DATE", temp_data)
+                return
+            
+            if input_text.startswith("date_slot:"):
+                iso_str = input_text.split(":", 1)[1]
+                parsed_dt = datetime.fromisoformat(iso_str)
+                temp_data["match_time"] = parsed_dt.isoformat()
+                temp_data["match_time_text"] = parsed_dt.strftime("%d/%m à %Hh%M")
+            else:
+                parsed_dt = parse_date_input(input_text)
+                temp_data["match_time"] = parsed_dt.isoformat()
+                temp_data["match_time_text"] = input_text
+                
+            temp_data.pop("waiting_for_manual_date", None)
             await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_LOCATION", temp_data)
             await whatsapp_service.send_text_message(
                 to=phone_number,
                 text=(
                     "Où se déroulera le match ? 📍\n\n"
                     "👉 Option A: Partagez la position GPS/localisation via WhatsApp (Bouton + > Localisation).\n"
-                    "👉 Option B: Entrez simplement le nom du terrain (ex: Agora Koumassi)."
+                    "👉 Option B: Entrez simplement le nom du terrain (ex: Agora Koumassi) ou un lien Google Maps."
                 )
             )
             return
@@ -491,27 +614,45 @@ async def handle_whatsapp_message(
         temp_data["niveau"] = level
         await crud.create_or_update_registration_state(db, phone_number, "ASK_LANGUE", temp_data)
         
-        await whatsapp_service.send_interactive_buttons(
+        await whatsapp_service.send_interactive_list(
             to=phone_number,
-            text="Quelle est votre langue préférée ?",
-            buttons=[
-                {"id": "lang_fr", "title": "Français"},
-                {"id": "lang_en", "title": "Anglais"}
+            text="Quelle est votre langue préférée ? 🌐",
+            button_label="Choisir la langue",
+            sections=[
+                {
+                    "title": "Langues",
+                    "rows": [
+                        {"id": "lang_darija", "title": "Darija 🇲🇦"},
+                        {"id": "lang_darija_en", "title": "Darija + Anglais 🇲🇦🇬🇧"},
+                        {"id": "lang_fr_en", "title": "Français + Anglais 🇫🇷🇬🇧"},
+                        {"id": "lang_darija_fr", "title": "Darija + Français 🇲🇦🇫🇷"},
+                        {"id": "lang_all", "title": "Les 3 (Darija+Fr+En) 🇲🇦🇫🇷🇬🇧"}
+                    ]
+                }
             ]
         )
         return
 
     elif current_step == "ASK_LANGUE":
         lang_map = {
-            "lang_fr": "fr",
-            "lang_en": "en",
-            "français": "fr",
-            "anglais": "en",
-            "french": "fr",
-            "english": "en"
+            "lang_darija": "Darija",
+            "lang_darija_en": "Darija + Anglais",
+            "lang_fr_en": "Français + Anglais",
+            "lang_darija_fr": "Darija + Français",
+            "lang_all": "Darija + Français + Anglais",
+            "darija": "Darija",
+            "darija+anglais": "Darija + Anglais",
+            "darija + anglais": "Darija + Anglais",
+            "français+anglais": "Français + Anglais",
+            "français + anglais": "Français + Anglais",
+            "darija+français": "Darija + Français",
+            "darija + français": "Darija + Français",
+            "les 3": "Darija + Français + Anglais",
+            "les trois": "Darija + Français + Anglais",
+            "toutes": "Darija + Français + Anglais",
         }
         
-        lang = lang_map.get(input_text.lower(), "fr")
+        lang = lang_map.get(input_text.lower(), input_text)
         temp_data["langue"] = lang
         await crud.create_or_update_registration_state(db, phone_number, "ASK_VILLE", temp_data)
         await whatsapp_service.send_text_message(
@@ -583,9 +724,22 @@ async def handle_whatsapp_message(
         category = cat_map.get(input_text.lower(), input_text)
         temp_data["categorie"] = category
         await crud.create_or_update_registration_state(db, phone_number, "ASK_SPORT", temp_data)
-        await whatsapp_service.send_text_message(
+        
+        await whatsapp_service.send_interactive_list(
             to=phone_number,
-            text="Quel est votre *sport préféré* (ex: Football, Basketball, Tennis) ?"
+            text="Quel est votre *sport préféré* ? 🏆",
+            button_label="Choisir le sport",
+            sections=[
+                {
+                    "title": "Sports",
+                    "rows": [
+                        {"id": "sport_football", "title": "Football ⚽"},
+                        {"id": "sport_basketball", "title": "Basketball 🏀"},
+                        {"id": "sport_tennis", "title": "Tennis 🎾"},
+                        {"id": "sport_boxe", "title": "Boxe 🥊"}
+                    ]
+                }
+            ]
         )
         return
 
@@ -593,7 +747,14 @@ async def handle_whatsapp_message(
         if not input_text:
             await whatsapp_service.send_text_message(to=phone_number, text="S'il vous plaît, entrez votre sport préféré :")
             return
-        temp_data["sport_prefere"] = input_text
+        sport_map = {
+            "sport_football": "Football",
+            "sport_basketball": "Basketball",
+            "sport_tennis": "Tennis",
+            "sport_boxe": "Boxe",
+        }
+        sport = sport_map.get(input_text.lower(), input_text.capitalize())
+        temp_data["sport_prefere"] = sport
 
         # Complete Registration!
         user_in = UserCreate(

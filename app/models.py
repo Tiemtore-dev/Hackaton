@@ -13,7 +13,7 @@ class User(Base):
     prenom: Mapped[str | None] = mapped_column(String(100), nullable=True)
     age: Mapped[int | None] = mapped_column(Integer, nullable=True)
     niveau: Mapped[str | None] = mapped_column(String(50), nullable=True)
-    langue: Mapped[str] = mapped_column(String(10), default="fr", nullable=False)
+    langue: Mapped[str] = mapped_column(String(100), default="fr", nullable=False)
     ville: Mapped[str | None] = mapped_column(String(100), nullable=True)
     quartier: Mapped[str | None] = mapped_column(String(100), nullable=True)
     taille: Mapped[int | None] = mapped_column(Integer, nullable=True)

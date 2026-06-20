@@ -108,4 +108,60 @@ class WhatsAppService:
             logger.error(f"Error calling Meta WhatsApp API for interactive message to {to}: {str(e)}")
             return False
 
+    async def send_interactive_list(
+        self,
+        to: str,
+        text: str,
+        button_label: str,
+        sections: list[dict],
+        title: str | None = None
+    ) -> bool:
+        """
+        Sends an interactive list message (dropdown menu).
+        sections should be a list of sections, each having:
+        {"title": "Section Title", "rows": [{"id": "row_id", "title": "Row Title", "description": "optional description"}]}
+        """
+        payload = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": to,
+            "type": "interactive",
+            "interactive": {
+                "type": "list",
+                "body": {"text": text},
+                "action": {
+                    "button": button_label,
+                    "sections": sections
+                }
+            }
+        }
+        if title:
+            payload["interactive"]["header"] = {"type": "text", "text": title}
+
+        if "fake" in settings.WHATSAPP_API_TOKEN or "fake" in settings.WHATSAPP_PHONE_NUMBER_ID:
+            btn_titles = ", ".join([f"{r['title']}" for s in sections for r in s["rows"]])
+            logger.info(f"[MOCK WHATSAPP LIST to {to}]: {text} | Options: {btn_titles}")
+            print(f"\n📢 [MOCK WHATSAPP TO {to} with List]:\n{text}\n📋 Options: {btn_titles}\n")
+            return True
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    self.api_url,
+                    json=payload,
+                    headers=self.headers,
+                    timeout=10.0
+                )
+                if response.status_code in [200, 201]:
+                    logger.info(f"Interactive list message sent to {to} successfully.")
+                    return True
+                else:
+                    logger.error(
+                        f"Failed to send list message to {to}. Code: {response.status_code}, Response: {response.text}"
+                    )
+                    return False
+        except Exception as e:
+            logger.error(f"Error calling Meta WhatsApp API for list message to {to}: {str(e)}")
+            return False
+
 whatsapp_service = WhatsAppService()

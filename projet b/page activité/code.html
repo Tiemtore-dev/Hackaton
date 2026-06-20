@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SportMate - Activités Sportives</title>
+<!-- Montserrat Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e5e2e1",
+                    "secondary-fixed": "#aaf1d2",
+                    "tertiary-fixed": "#ffdea5",
+                    "on-secondary-fixed": "#002116",
+                    "inverse-primary": "#b3c5ff",
+                    "surface": "#fcf9f8",
+                    "on-surface-variant": "#444650",
+                    "on-tertiary-container": "#ad8a46",
+                    "primary-fixed-dim": "#b3c5ff",
+                    "on-primary-fixed": "#00174a",
+                    "surface-container-highest": "#e5e2e1",
+                    "on-background": "#1b1c1c",
+                    "surface-container-low": "#f6f3f2",
+                    "surface-dim": "#dcd9d9",
+                    "outline-variant": "#c5c6d2",
+                    "tertiary-fixed-dim": "#e9c176",
+                    "secondary-container": "#a7efcf",
+                    "tertiary-container": "#362500",
+                    "on-tertiary-fixed-variant": "#5d4201",
+                    "on-primary-fixed-variant": "#2a4386",
+                    "tertiary": "#1d1200",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f3f0ef",
+                    "background": "#fcf9f8",
+                    "on-tertiary": "#ffffff",
+                    "outline": "#757682",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#dbe1ff",
+                    "on-surface": "#1b1c1c",
+                    "on-primary-container": "#758dd5",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-high": "#eae7e7",
+                    "surface-container": "#f0eded",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#002366",
+                    "primary": "#00113a",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#435b9f",
+                    "on-tertiary-fixed": "#261900",
+                    "on-error-container": "#93000a",
+                    "on-secondary-container": "#276e56",
+                    "on-secondary-fixed-variant": "#00513b",
+                    "secondary": "#216a52",
+                    "inverse-surface": "#303030",
+                    "surface-bright": "#fcf9f8",
+                    "secondary-fixed-dim": "#8ed5b7",
+                    "brand-cream": "#FFFDD0",
+                    "brand-offwhite": "#F9F8F0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "16px",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "xl": "64px",
+                    "margin-desktop": "80px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "md": "24px",
+                    "lg": "40px",
+                    "margin-mobile": "16px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "sans": ["Montserrat", "sans-serif"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "caption": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "headline-lg": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "headline-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #FFFDD0; /* Brand Cream */
+            font-family: 'Montserrat', sans-serif;
+            color: #1b1c1c;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .kinetic-card {
+            background-color: #F9F8F0;
+            border: 1px solid rgba(0, 17, 58, 0.05); /* Royal Blue 5% */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .kinetic-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 8px 30px rgba(0, 17, 58, 0.08);
+            background-color: #f2f1e6;
+        }
+        .accent-bar-active {
+            border-left: 4px solid #216a52; /* Imperial Green */
+        }
+        /* Custom scrollbar for horizontal filters on mobile */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-brand-cream text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-inverse-surface shadow-sm sticky top-0 z-50">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">SportMate</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-body-md text-body-md" href="#">Discover</a>
+<a class="text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 font-body-md text-body-md" href="#">Activities</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-body-md text-body-md" href="#">Messages</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md ml-2 w-48" placeholder="Rechercher..." type="text"/>
+</div>
+<button class="scale-102 transition-transform duration-200 active:scale-95 flex items-center gap-2 font-body-md text-body-md text-primary font-bold">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Profile</span>
+</button>
+</div>
+</nav>
+</header>
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Hero Section -->
+<section class="mb-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="max-w-2xl">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-4">Trouvez votre prochaine session</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Rejoignez des sportifs passionnés près de chez vous pour des entraînements collectifs ou des matchs amicaux.</p>
+</div>
+<!-- Inline Create Action (Secondary) -->
+<button class="hidden md:flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md shadow-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+                    CRÉER UNE ACTIVITÉ
+                </button>
+</div>
+<!-- Mobile Search Bar Overlay -->
+<div class="mt-8 md:hidden">
+<div class="flex items-center bg-brand-offwhite p-4 rounded-lg shadow-sm border-b-2 border-primary">
+<span class="material-symbols-outlined text-primary mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full font-body-md" placeholder="Sport, lieu, ou club..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Filters Bar -->
+<section class="mb-lg overflow-x-auto hide-scrollbar">
+<div class="flex items-center gap-4 min-w-max pb-4">
+<div class="flex items-center gap-2 bg-brand-offwhite border border-outline-variant/20 px-4 py-2 rounded-full text-on-surface-variant font-label-md text-label-md cursor-pointer hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">fitness_center</span>
+                    Type de Sport
+                    <span class="material-symbols-outlined">expand_more</span>
+</div>
+<div class="flex items-center gap-2 bg-brand-offwhite border border-outline-variant/20 px-4 py-2 rounded-full text-on-surface-variant font-label-md text-label-md cursor-pointer hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">leaderboard</span>
+                    Niveau
+                    <span class="material-symbols-outlined">expand_more</span>
+</div>
+<div class="flex items-center gap-2 bg-brand-offwhite border border-outline-variant/20 px-4 py-2 rounded-full text-on-surface-variant font-label-md text-label-md cursor-pointer hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                    Date
+                    <span class="material-symbols-outlined">expand_more</span>
+</div>
+<div class="flex items-center gap-2 bg-brand-offwhite border border-outline-variant/20 px-4 py-2 rounded-full text-on-surface-variant font-label-md text-label-md cursor-pointer hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                    Distance
+                    <span class="material-symbols-outlined">expand_more</span>
+</div>
+<div class="ml-auto flex gap-2">
+<span class="text-caption font-caption text-on-surface-variant self-center mr-2">12 activités trouvées</span>
+<button class="text-primary font-label-md text-label-md hover:underline">Réinitialiser</button>
+</div>
+</div>
+</section>
+<!-- Main Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1: Tennis -->
+<div class="kinetic-card rounded-lg overflow-hidden flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" data-alt="A dynamic, high-action photograph of a tennis player hitting a powerful serve on a bright blue hard court. The sunlight creates sharp shadows, emphasizing the athletic motion. The aesthetic is clean and high-performance, with a focus on precision and energy, using a bright white and deep blue color scheme to match a premium sporting club atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwPUVp2EbcrQkahVZfpNwxJtuLl_t1HO5hZQYU-7dKTTM8kD0HXA9T-gu8x9b_D26-HUGTrYQ_LVvTSaGH9GSBLE_71KbRuUT168GxhQe4UCCT4fz_watFNUsjay7Xn9j4ncXtnYFsUCkQoA_MGH1ohj2qUQfg5KxrYu3dftuY0hSg1O-7jDVxH-VV99sIUzfNv4PTu4KE3rS5E6JX5WQv7oF8DOUHl5Ahq-ErJidyDUl1ckcheMjM-23-WaJhIbJkUCOH_vX_Z47e"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full font-label-md text-[12px] backdrop-blur-sm">
+                        INTERMÉDIAIRE
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Match de Tennis 2v2</h3>
+<span class="text-secondary font-bold text-caption">€12.00</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-md text-body-md">Samedi, 14:00</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Tennis Club de Paris, 16e</span>
+</div>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a friendly athletic woman in her 30s with a warm smile, wearing a modern white sports jersey. High-key studio lighting with a clean cream background. The portrait exudes confidence, leadership, and a welcoming personality, fitting for a community sport organizer." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXxBPtr9Tc5MUhFSeFUH2kh4MZ_mnLP4e2w-10f26QbvWA4tblOLsoaZvwpm7HJm5KTePKdN9GGMEFXVbfsEmG_CW04rTVecA1mss2XKPPhGIjb6ImQBMLDzq_MctkZxM1WnwTDDDQrnuweyiIauR0SWSaT5llNbqXHyPnZj_F-u3S0YIv0Y_ZIRs_tmOnxsElOrtxjZk43BBS5-DfARGIQzG8uzaMB4EXe4oI2GMZ60rYS1w8tLYrgOZ3ie-EvB1jJ7uyGZPtWbxB"/>
+</div>
+<div class="flex flex-col">
+<span class="text-caption font-caption font-bold">Sophie L.</span>
+<span class="text-[11px] text-secondary font-bold uppercase">3/4 PLACES</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">REJOINDRE</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Yoga -->
+<div class="kinetic-card rounded-lg overflow-hidden flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" data-alt="A serene outdoor yoga session at sunrise in a lush city park. A group of people are in a warrior pose on high-quality mats. The lighting is soft and golden, creating a peaceful, premium lifestyle atmosphere. The color palette features calming greens and warm cream tones, maintaining a sophisticated minimalist sporting aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx8xFtGadiOICga6rCJC9ToyQWuYHRbGk_kNVbwKp_aYvUXhwA7bLG-72z1nTxE5QXvbo8czezkDE95juVb8P2ow8_dzGC4nstUkX3zUVmR10YfVwY2wzxhDgVDeJO1O-0i_XSUBenLuzdrGLeHGcnewYNKaEEvBMOtaCpGiVVdNXZnB3BKOizTwJu5ahYJosdpTNpdBoKaFCDhH0RGblniRcQhZ90IjMXusCzgmsMmST_ZKblo6OMqbm1QNXbWucQF3PcsCs6Kazg"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full font-label-md text-[12px] backdrop-blur-sm">
+                        TOUS NIVEAUX
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Session Yoga Matinal</h3>
+<span class="text-secondary font-bold text-caption">GRATUIT</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-md text-body-md">Demain, 08:30</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Jardin des Tuileries</span>
+</div>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male yoga instructor in his 40s with a calm expression, wearing a simple grey cotton t-shirt. The background is a blurred minimalist studio with natural light. The image reflects zen-like focus and professional tranquility within a high-end wellness context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkErLrfBJduCYnsWhhPET1qa1_ys-pj7YdpiFI4iKLycB2pgBgpDUBOBEfXcDLUZDALKbB5KKaG9CXwE24vHTqqzAZJxJMB_atSlqVHmKLBLF4ZJt3WhTxeqxIondOlJL9SSBaf5zBCgA6HPtdbq45HyFSVnNj44wOkeFetscLigYfH6ZFhMTfWl5VRzD0DXlg_r6_WDmHJF8V0jo22pApKYEtaeNMIa6cKuBJrXv2p9TgSc__l6zCymw-uwYUn1gInsLIWwAx6FC9"/>
+</div>
+<div class="flex flex-col">
+<span class="text-caption font-caption font-bold">Marc A.</span>
+<span class="text-[11px] text-secondary font-bold uppercase">8/15 PLACES</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">REJOINDRE</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Football -->
+<div class="kinetic-card rounded-lg overflow-hidden flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" data-alt="A close-up action shot of a soccer ball being kicked across a pristine green turf field under bright stadium lights. Motion blur in the background gives a sense of speed and intensity. The lighting is dramatic and crisp, emphasizing the texture of the ball and grass, aligned with a high-performance heritage sports brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ9WHbZfcQArsWMBX3cpBINI1rE9ySfiH4HDgZtcag3E_LXDd5_g4lle0s6mvO8vMb2X30KGJVdtsm0qM75btL-Gta4gWSUXtm71QDrwN2fXXU2QYsDnpyCnN5yjPbiDG-a1lNjJxxDVUrs2Sb04-IeAsC8CkL1oAFWOvWZHJ0uWI6dLSBberKViu0gJCO2XGswGgCuJb2uEh0v9YXiMzhsznSI84UR5q1ykMu5pf_JfLKrcBV5WdOVAhMUF7rZguZnERzuO2UgYSL"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full font-label-md text-[12px] backdrop-blur-sm">
+                        AVANCÉ
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Foot 5v5 Compétitif</h3>
+<span class="text-secondary font-bold text-caption">€8.00</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-md text-body-md">Lundi, 19:00</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Le Five Paris 18</span>
+</div>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A portrait of a young man with an energetic look, wearing a professional navy blue training jacket. He has a determined yet friendly gaze. The lighting is direct and sharp, evoking a modern athletic feel. The background is a clean solid cream tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCU-juxmGeHQ7J922B6vvXf5TeKG7e4KuYQOjxfzxai-SKnXivcqCJcUXdte7DEYhYLS1Uirz5nRlRvJCxmCpR85skg2JfmgwyARFfVpi5HqsPIWPSuFJVsjPhlJ-G5F4fw8iP4uE6P0Ttcv_jreG923f3RNyJJZ4pZkojIfeZf-Ww6YkjtvdLG0XVziYO177UlPEJ5LadWZ9D_fuZtNHs4F0ZXtjGS6c86ZaoXRvdjscV8lrSl6a04McYUdO3GzKGMy-RTNbDvxM_8"/>
+</div>
+<div class="flex flex-col">
+<span class="text-caption font-caption font-bold">Kevin D.</span>
+<span class="text-[11px] text-secondary font-bold uppercase">9/10 PLACES</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">REJOINDRE</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Running -->
+<div class="kinetic-card rounded-lg overflow-hidden flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" data-alt="A group of runners in high-end athletic apparel sprinting along a scenic riverbank at sunset. The image is shot from a low angle to convey power and momentum. Warm orange light reflects off the water, contrasting with deep blue silhouettes. The overall vibe is premium, inspiring, and focused on physical excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAFB-4X9SAjFWIbA64OhwQkITsNtp_b7JDNaUvbiKTnxxttZtayX59uwytRyETRlM_Kx5VcjHq4oLDZspXP2OTcEEiaOWP9F6f8o8XAYuqAKgLE4YO6vgv1Bczs_1wYOnmozSoFX3KYPrNLj5DZ592RFb-R_C55BmeGilJQNUCW34k8r2xQsGVlgyIHNXGGIh214tLT-FwNNHY2W25AXg9BP8S33eQXuRhg-_5ByLGNviyqbGuquljCB7F_b8VEdS3Zl599OdDcBFj"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full font-label-md text-[12px] backdrop-blur-sm">
+                        INTERMÉDIAIRE
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Run 10km Quais de Seine</h3>
+<span class="text-secondary font-bold text-caption">GRATUIT</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-md text-body-md">Mardi, 18:30</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Pont Neuf, Paris</span>
+</div>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A portrait of an endurance runner, mid-30s, looking focused and calm. They are wearing a specialized running singlet with subtle brand logos. The skin has a slight athletic glow from physical exertion. High-contrast lighting highlights muscle definition and character, set against a minimalist light grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkcpUjBpYyX-X741xWHLvgoSjLUkpBajut8Yhz-U7hTqm0otTkuLIG-EKiFLsmHUQ_ecraglhaRrCaikK70PYyJSbUbiAAdW7-4VXZV17eJR0rErB5T00krFr1JmHl3_w63TqK0U1Et8JjXgmkYXR8AhFWxTMyOYkberK5luSq6hcj0bqAg7ZL_mKwoH9gA1y5tOFaetImzl5UdTJGWbfYOlcIDsWapDgyRord4xhjQ3-cv0liZ7YRp9jchGmnu_oQGyWvFghiEUGY"/>
+</div>
+<div class="flex flex-col">
+<span class="text-caption font-caption font-bold">Julia M.</span>
+<span class="text-[11px] text-secondary font-bold uppercase">5/20 PLACES</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">REJOINDRE</button>
+</div>
+</div>
+</div>
+<!-- Card 5: Basket -->
+<div class="kinetic-card rounded-lg overflow-hidden flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" data-alt="A stylish urban basketball court with vibrant colors and geometric patterns on the ground. A single player is captured in mid-air performing a layup. The lighting is crisp afternoon sun, creating long dramatic shadows. The image has a high-fashion editorial feel, combining urban sport culture with a premium visual standard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKDwIoQ4XQ4GiV7FMKRkxy9fKttBlGGpwVcNF2umfelmmVAceDmdm_Z9mkY3qoY02zJXpvSPtSNV5WfGZQtp7Jlh3B4NtqjgRlLQhlkI5M--pq89KeRGgnQdvsLpMIyG7mvZu-hGCofdc6hYdUw6W6dJvCSnedupvEOcf8OAt-WDd2U9JEfhp2aQyEVw_wVMLmsJ8QDPGCf503FYAqsh8RSVFePHaT5WKTGjFzLHUZ2FzmAN3uUv-t0P4IAxF7oVcmkYw9E-IzBGPs"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full font-label-md text-[12px] backdrop-blur-sm">
+                        INTERMÉDIAIRE
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Pick-up Game 3v3</h3>
+<span class="text-secondary font-bold text-caption">GRATUIT</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-md text-body-md">Mercredi, 17:00</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Playground Duperré</span>
+</div>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A portrait of a tall, athletic basketball enthusiast with a confident smile. He is wearing a high-performance tank top. The lighting is warm and natural. The image conveys a sense of community and team spirit, fitting for a social sports app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1UZjZfFUEOp0irqvMiJ8eMpFB591wuDvV6YbuyyblLaT-rwGDFjJS6UMXo-fG_GKbQpXIU-62xB2aJpt24JaIi7b3s5NY19XEjbaTEKEVqzj9jjMG3VK9k9rMsESR6yDFjfp97fETWeZ6VIttrqlmXqlzsCnU2mNg8OD-IHTokh88pPjUVlgJVQHVX5Y8i0QmaBN4bIi-M_1D4Q5Z9__t3475ZvpUVDuoQfEJs0Tb8eMw28HMiBA8LFESNgHucWvPHbpnX6FowH2B"/>
+</div>
+<div class="flex flex-col">
+<span class="text-caption font-caption font-bold">Thomas V.</span>
+<span class="text-[11px] text-secondary font-bold uppercase">2/6 PLACES</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">REJOINDRE</button>
+</div>
+</div>
+</div>
+<!-- Card 6: Swimming -->
+<div class="kinetic-card rounded-lg overflow-hidden flex flex-col">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" data-alt="A breathtaking view of a modern Olympic-sized swimming pool with crystal clear turquoise water. Sunlight streams through large glass windows, creating dancing light patterns on the pool floor. A single swimmer is doing laps with perfect form. The aesthetic is clean, luxurious, and technologically advanced, using a palette of white, teal, and royal blue." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxniJthl5y0_cfcxiZNyMvhgGygNK_pzZ32iaj64AZKaQ_Cbi9bFkVgt6X0jQnwpTYK39LcjCMAJsBMw5HhX-4Tgg9B-fDuaFMWuiQ6UVopLtZrOBUFHfdmr5fRMaGVDclk7cHSDFLZ_jLE_yQIIj4vymhgSpvO4h9Z5hFKHxVAuWoGoDF9orHTnrmi69U3whKKTzkD9NrheeRasawBMU3Xh2IgP7eYZoU50aOXnopK99vDZYL8oiqJUVZe3Yuq8EuLtfu_AAheWL2"/>
+<div class="absolute top-4 right-4 bg-secondary-container/90 text-on-secondary-container px-3 py-1 rounded-full font-label-md text-[12px] backdrop-blur-sm">
+                        AVANCÉ
+                    </div>
+</div>
+<div class="p-md flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline-md text-headline-md text-primary leading-tight">Entraînement Natation</h3>
+<span class="text-secondary font-bold text-caption">€6.50</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-4">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-body-md text-body-md">Jeudi, 07:00</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md truncate">Piscine Pontoise, 5e</span>
+</div>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A professional swimmer's portrait, wearing high-performance goggles around her neck and a silicon swim cap. She has a focused, elite athlete's expression. Soft overhead lighting with cool blue and white tones. The mood is disciplined and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdWUdZLJL-CjnCmfgHorSuuYVGRbpguDxxx-jIGP-hzHPCKnaocpc_sve4gXJICr67EbaHtfuS2oWYohEGfiCMPRL7XQw-wJ6y9LBIIqEYz6IlzXKq1bhpL2JyhDmCEBAzyVfgGxFlLZxXlokoEPVoNLpZFAy9Pa9IqGI7MvW0XxlQHmJRtYRDUbpuEQgZWpzLpYdEHWmpjEn_-nY7tuV8DKNmXi8rLY_SwFQMizNzkJII0-jHnH841pflsL_8pSyRRA5o3Pf4LnVr"/>
+</div>
+<div class="flex flex-col">
+<span class="text-caption font-caption font-bold">Claire F.</span>
+<span class="text-[11px] text-secondary font-bold uppercase">1/4 PLACES</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm">REJOINDRE</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination or Load More -->
+<div class="flex justify-center mt-xl">
+<button class="bg-brand-offwhite border-2 border-primary text-primary px-8 py-3 rounded-lg font-label-md text-label-md hover:bg-primary/5 transition-all">
+                VOIR PLUS D'ACTIVITÉS
+            </button>
+</div>
+</main>
+<!-- Floating Action Button (Mobile) -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-xl z-50 transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+<!-- Footer -->
+<footer class="bg-surface-container-high dark:bg-surface-container-highest mt-xl">
+<div class="w-full py-12 px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between gap-12">
+<div class="max-w-xs">
+<span class="font-headline-md text-headline-md font-bold text-primary mb-4 block">SportMate</span>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">La plateforme de référence pour connecter les sportifs et dynamiser votre pratique collective.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">share</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">mail</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">public</span>
+</div>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-8 flex-grow md:ml-xl">
+<div class="flex flex-col gap-3">
+<span class="font-label-md text-label-md text-on-surface font-bold mb-1">Plateforme</span>
+<a class="text-on-surface-variant hover:underline hover:text-primary transition-all font-body-md text-body-md" href="#">Community</a>
+<a class="text-on-surface-variant hover:underline hover:text-primary transition-all font-body-md text-body-md" href="#">Guidelines</a>
+<a class="text-on-surface-variant hover:underline hover:text-primary transition-all font-body-md text-body-md" href="#">Careers</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-label-md text-label-md text-on-surface font-bold mb-1">Légal</span>
+<a class="text-on-surface-variant hover:underline hover:text-primary transition-all font-body-md text-body-md" href="#">Privacy</a>
+<a class="text-on-surface-variant hover:underline hover:text-primary transition-all font-body-md text-body-md" href="#">Terms</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-label-md text-label-md text-on-surface font-bold mb-1">Assistance</span>
+<a class="text-on-surface-variant hover:underline hover:text-primary transition-all font-body-md text-body-md" href="#">Support</a>
+<a class="text-on-surface-variant hover:underline hover:text-primary transition-all font-body-md text-body-md" href="#">FAQ</a>
+</div>
+</div>
+</div>
+<div class="border-t border-outline-variant/10 w-full py-6 px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="text-caption font-caption text-on-surface-variant">© 2024 SportMate. All rights reserved.</span>
+<div class="flex gap-4">
+<div class="bg-surface-variant p-2 rounded flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">language</span>
+<span class="text-caption font-caption">Français (FR)</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and simple state handling
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.kinetic-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    // Possible subtle GSAP or CSS transform handled by classes
+                });
+            });
+
+            // Mock filter click
+            const filters = document.querySelectorAll('.cursor-pointer');
+            filters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    this.classList.toggle('border-primary');
+                    this.classList.toggle('bg-primary/5');
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+:root {
+  /* Default to discover/activity colors */
+  --bg-page: #FAF7EF;         /* fond général (header, sections claires, footer) */
+  --bg-section-gray: #E3E1DC; /* fond section "Sports populaires" / "Partenaires" */
+  --bg-card: #FDFBF4;         /* fond des cartes (activités, partenaires) */
+  --border-light: #E2DED4;    /* bordures fines des cartes et inputs */
+
+  /* Navy (couleur principale de marque) */
+  --navy-primary: #16223F;    /* logo, avatar, bouton "Rechercher", bouton "Message", texte titres */
+  --navy-dark: #0D1730;       /* fond dégradé section CTA "Prêt à bouger ?" */
+
+  /* Vert (accent / call-to-action) */
+  --green-accent: #2D6A4D;    /* badges stats, pills de niveau, bouton "S'inscrire gratuitement" */
+  --green-text: #FFFFFF;      /* texte sur fond vert */
+
+  /* Texte */
+  --text-primary: #16223F;    /* titres */
+  --text-secondary: #5C5C5C; /* descriptions, sous-textes */
+  --text-on-dark: #FFFFFF;    /* texte sur navy/vert */
+
+  /* Tags & pills neutres */
+  --bg-tag-light: #EFEDE6;    /* pills sport (TENNIS, BASKET...) sur les profils */
+  --text-tag: #16223F;        /* texte des tags clairs */
+}
+
+/* Page Profil Theme Class */
+body.page-profile {
+  /* Couleurs neutres / fond */
+  --bg-page: #FAF6EC;        /* fond général de la page (header, footer) */
+  --bg-card: #FDFAF1;        /* fond des cartes (stats, activités, sports favoris) */
+  --bg-hero: #A89A93;        /* bandeau mauve/taupe derrière la photo de profil */
+  --bg-badge-neutral: #E6E1D8; /* badge "PASSÉ" */
+  --border-light: #E0DCD2;   /* séparateurs entre lignes d'activités */
+
+  /* Texte */
+  --text-primary: #1C2740;   /* titres, nom, valeurs des stats (bleu marine foncé) */
+  --text-secondary: #5C5C5C; /* sous-textes, dates, descriptions */
+  --text-muted: #8A8378;     /* labels en petites capitales */
+
+  /* Couleur de marque / accent */
+  --accent-navy: #1C2740;    /* bordure et texte du bouton "Modifier le profil" */
+  --accent-green: #2E6B4A;   /* score de fiabilité, % victoires, barre Running */
+  --bg-green-light: #DCEAD9; /* fond des tags Tennis/Padel/Running et badge "TERMINÉ" */
+  --text-green: #2E6B4A;     /* texte des badges/tags verts */
+
+  /* Barres de progression */
+  --progress-track: #E9E4D9; /* fond de la barre */
+  --progress-fill-navy: #1C2740;  /* remplissage Tennis/Padel */
+  --progress-fill-green: #2E6B4A; /* remplissage Running */
+
+  /* Scoped mappings for primary/secondary */
+  --navy-primary: #1C2740;
+  --green-accent: #2E6B4A;
+}
+
+/* Page Discover Theme Class */
+body.page-discover {
+  --bg-page: #FAF7EF;
+  --bg-section-gray: #E3E1DC;
+  --bg-card: #FDFBF4;
+  --border-light: #E2DED4;
+  --navy-primary: #16223F;
+  --navy-dark: #0D1730;
+  --green-accent: #2D6A4D;
+  --green-text: #FFFFFF;
+  --text-primary: #16223F;
+  --text-secondary: #5C5C5C;
+  --text-on-dark: #FFFFFF;
+  --bg-tag-light: #EFEDE6;
+  --text-tag: #16223F;
+}
+
+/* Page Activités Theme Class */
+body.page-activities {
+  --bg-page: #FAF7EF;
+  --bg-section-gray: #E3E1DC;
+  --bg-card: #FDFBF4;
+  --border-light: #E2DED4;
+  --navy-primary: #16223F;
+  --navy-dark: #0D1730;
+  --green-accent: #2D6A4D;
+  --green-text: #FFFFFF;
+  --text-primary: #16223F;
+  --text-secondary: #5C5C5C;
+  --text-on-dark: #FFFFFF;
+  --bg-tag-light: #EFEDE6;
+  --text-tag: #16223F;
+}
+
+@theme {
+  --color-primary: var(--navy-primary, #16223F);
+  --color-primary-container: var(--navy-dark, #0D1730);
+  --color-secondary: var(--green-accent, #2D6A4D);
+  --color-secondary-container: var(--bg-green-light, #DCEAD9);
+  --color-background: var(--bg-page);
+  --color-surface: var(--bg-page);
+  --color-on-surface: var(--text-primary);
+  --color-on-surface-variant: var(--text-secondary);
+  --color-outline: var(--border-light);
+  --color-outline-variant: var(--border-light);
+  
+  /* Brand/Page Scoped Colors mapping */
+  --color-brand-page: var(--bg-page);
+  --color-brand-card: var(--bg-card);
+  --color-brand-border: var(--border-light);
+  --color-brand-primary: var(--text-primary);
+  --color-brand-secondary: var(--text-secondary);
+  --color-brand-muted: var(--text-muted);
+  --color-brand-cream: var(--bg-page);
+  --color-brand-offwhite: var(--bg-card);
+
+  /* Profile page variables mapping */
+  --color-bg-hero: var(--bg-hero);
+  --color-bg-badge-neutral: var(--bg-badge-neutral);
+  --color-accent-navy: var(--accent-navy);
+  --color-accent-green: var(--accent-green);
+  --color-bg-green-light: var(--bg-green-light);
+  --color-text-green: var(--text-green);
+  --color-progress-track: var(--progress-track);
+  --color-progress-fill-navy: var(--progress-fill-navy);
+  --color-progress-fill-green: var(--progress-fill-green);
+
+  /* Discover & Activities mapping */
+  --color-bg-section-gray: var(--bg-section-gray);
+  --color-navy-primary: var(--navy-primary);
+  --color-navy-dark: var(--navy-dark);
+  --color-green-accent: var(--green-accent);
+  --color-green-text: var(--green-text);
+  --color-text-on-dark: var(--text-on-dark);
+  --color-bg-tag-light: var(--bg-tag-light);
+  --color-text-tag: var(--text-tag);
+
+  --font-sans: 'Montserrat', sans-serif;
+  --font-headline: 'Montserrat', sans-serif;
+  
+  --border-radius-lg: 16px;
+  --border-radius-xl: 0.75rem;
+}
+
+body {
+  background-color: var(--bg-page);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text-primary);
+}
+
+.player-card {
+  background-color: var(--bg-card);
+  box-shadow: 0px 4px 20px rgba(22, 34, 63, 0.08); /* Soft Ambient Shadow with Navy tint */
+  border: 1px solid var(--border-light);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 12px 30px rgba(22, 34, 63, 0.12);
+  background-color: var(--bg-page);
+}
+
+.kinetic-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kinetic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 8px 30px rgba(22, 34, 63, 0.08);
+  background-color: var(--bg-page);
+}
+
+.accent-bar-active {
+  border-left: 4px solid var(--green-accent, var(--accent-green));
+}
+
+/* Custom scrollbar for horizontal filters on mobile */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Glassmorphic Modal styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(13, 23, 48, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(22, 34, 63, 0.15);
+  padding: 2rem;
+}
+
+/* Custom scrollbar for lists */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-page);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--navy-primary, var(--accent-navy));
+  border-radius: 10px;
+}
+
+/* Elevation & Shadows from Project B */
+.card-shadow {
+  box-shadow: 0px 4px 20px rgba(22, 34, 63, 0.06);
+}
+
+.status-indicator {
+  box-shadow: 0 0 0 4px var(--bg-card);
+}
+
+.accent-bar {
+  border-left: 4px solid var(--green-accent, var(--accent-green));
+}
+
+/* Typography Classes */
+.font-display-lg {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+.text-display-lg {
+  font-size: 48px;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+}
+
+.font-headline-lg {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+.text-headline-lg {
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+}
+
+.font-headline-lg-mobile {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+.text-headline-lg-mobile {
+  font-size: 28px;
+  line-height: 34px;
+}
+
+.font-headline-md {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+.text-headline-md {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.font-body-lg {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+.text-body-lg {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.font-body-md {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+.text-body-md {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.font-label-md {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+.text-label-md {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.05em;
+}
+
+.font-caption {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+.text-caption {
+  font-size: 12px;
+  line-height: 16px;
+}

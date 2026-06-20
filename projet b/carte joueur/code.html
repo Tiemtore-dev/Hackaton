@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SportMate - Player Profile Card</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#435b9f",
+                    "on-tertiary-container": "#ad8a46",
+                    "surface": "#fcf9f8",
+                    "primary-container": "#002366",
+                    "surface-container-low": "#f6f3f2",
+                    "on-background": "#1b1c1c",
+                    "inverse-on-surface": "#f3f0ef",
+                    "surface-container": "#f0eded",
+                    "inverse-surface": "#303030",
+                    "outline": "#757682",
+                    "background": "#fcf9f8",
+                    "tertiary-container": "#362500",
+                    "outline-variant": "#c5c6d2",
+                    "on-surface-variant": "#444650",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#2a4386",
+                    "tertiary-fixed-dim": "#e9c176",
+                    "on-surface": "#1b1c1c",
+                    "secondary-fixed": "#aaf1d2",
+                    "on-error-container": "#93000a",
+                    "primary": "#00113a",
+                    "tertiary": "#1d1200",
+                    "on-tertiary": "#ffffff",
+                    "inverse-primary": "#b3c5ff",
+                    "on-secondary-container": "#276e56",
+                    "on-primary-container": "#758dd5",
+                    "secondary-container": "#a7efcf",
+                    "surface-container-high": "#eae7e7",
+                    "secondary": "#216a52",
+                    "surface-dim": "#dcd9d9",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#00513b",
+                    "error": "#ba1a1a",
+                    "primary-fixed": "#dbe1ff",
+                    "on-tertiary-fixed": "#261900",
+                    "on-primary-fixed": "#00174a",
+                    "surface-variant": "#e5e2e1",
+                    "surface-bright": "#fcf9f8",
+                    "primary-fixed-dim": "#b3c5ff",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed": "#ffdea5",
+                    "on-tertiary-fixed-variant": "#5d4201",
+                    "surface-container-highest": "#e5e2e1",
+                    "on-secondary-fixed": "#002116",
+                    "secondary-fixed-dim": "#8ed5b7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "16px",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "64px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "80px",
+                    "lg": "40px",
+                    "gutter": "24px",
+                    "sm": "12px",
+                    "base": "8px",
+                    "md": "24px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Montserrat"],
+                    "caption": ["Montserrat"],
+                    "display-lg": ["Montserrat"],
+                    "body-md": ["Montserrat"],
+                    "label-md": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "body-lg": ["Montserrat"],
+                    "headline-lg": ["Montserrat"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #FFFDD0; /* Cream Background as per Brand Anchor */
+            font-family: 'Montserrat', sans-serif;
+        }
+        .player-card {
+            background-color: #F9F8F0; /* Off-White surface */
+            box-shadow: 0px 4px 20px rgba(0, 17, 58, 0.08); /* Soft Ambient Shadow with Royal Blue tint */
+            border: 1px solid rgba(0, 17, 58, 0.05); /* Royal Blue at 5% opacity */
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+        .player-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0px 12px 30px rgba(0, 17, 58, 0.12);
+            background-color: #f3f2ea;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .status-indicator {
+            box-shadow: 0 0 0 4px #F9F8F0;
+        }
+        .accent-bar {
+            width: 4px;
+            height: 100%;
+            background-color: #216a52; /* Imperial Green */
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+<!-- TopNavBar Integration (Source: JSON) -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface dark:bg-inverse-surface shadow-sm">
+<nav class="flex justify-between items-center w-full px-margin-desktop max-w-[1280px] mx-auto h-16">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">SportMate</div>
+<!-- Desktop Links -->
+<div class="hidden md:flex gap-8 items-center h-full">
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed-dim border-b-2 border-primary dark:border-primary-fixed-dim pb-1 hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Discover</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Activities</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Messages</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 rounded-full hover:bg-surface-container transition-all">search</div>
+<div class="font-body-md text-body-md text-primary font-bold cursor-pointer transition-transform duration-200 active:scale-95 scale-102">Profile</div>
+</div>
+</nav>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-container-max mx-auto flex flex-col items-center justify-center mt-24 mb-xl">
+<!-- Section Heading -->
+<div class="text-center mb-lg">
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">Joueurs à proximité</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Trouvez votre prochain partenaire de jeu idéal.</p>
+</div>
+<!-- Profile Card Container (Bento Layout style) -->
+<div class="grid grid-cols-1 lg:grid-cols-1 gap-gutter w-full max-w-[440px]">
+<article class="player-card relative w-full max-w-[400px] aspect-[2/3] overflow-hidden flex flex-col bg-gradient-to-br from-primary via-secondary to-primary p-6 text-on-primary shadow-2xl" style="clip-path: polygon(50% 0%, 100% 15%, 100% 85%, 50% 100%, 0% 85%, 0% 15%);">
+<!-- Card Shine Effect -->
+<div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+<!-- Top Section: Rating, Flag, Sport & Photo -->
+<div class="relative flex justify-between items-start mt-8">
+<!-- Left Column: Stats & Identity -->
+<div class="flex flex-col items-center gap-2 ml-4">
+<div class="font-bold text-6xl tracking-tighter">88</div>
+<div class="w-10 h-6 bg-surface/20 rounded-sm flex items-center justify-center overflow-hidden">
+<img alt="FR" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7HpSpgksNIkMpnigjobSOLV_Tkw6rIfAnHZsBA4uHSyMUOOHxmMjVkVAGHS0fWrPqE-CoronLoIWKJM9c3RlqlvDGhBPUmDqGzLevb_pSw8LGGcOkFxeHO4uzX09Ks3uduneLZOpU4NBxcy2hU8jHS1KDsF3IDdL5vmgbQm4kXQTjteAmh5Hnyd2WzQXZBdMc4DYajUlfKeqh8WdPxLZspoIJX2GXqJs28VB022lfoZlpx6Y4_RWxEteMDf6NsirjCPu8i4hPlFOR"/>
+</div>
+<span class="material-symbols-outlined text-3xl">sports_tennis</span>
+</div>
+<!-- Right Column: Player Photo -->
+<div class="w-48 h-48 -mr-4">
+<img alt="Julien Lefebvre" class="w-full h-full object-cover mask-image-gradient" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ-dMbue0MXa4JvaaK1VinpTQsXjxXSx5H1CiS6SYRNCNZkpSSzYkhtopczGI46ek_1f2vdQZdPuLMSQTXoKGnSxCALdccbjQhMuggiYu2orQqrj8PcexyzlfHeJD4EuHph1ix5vcJv2465G-d3zigB8IGoQH8j2aEnoJ3l6-kcHWvkeaFntdxZCgNubvrtPEC3mHNKN_A5z2G4jrD6wP78O8dNZurslZabRIwjmwKoeePCRGF-9TGPB_VHIPv5Kz-7c_VnVr0NMQK" style="-webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);"/>
+</div>
+</div>
+<!-- Name Section -->
+<div class="text-center mt-4 border-t border-b border-white/20 py-2">
+<h2 class="font-bold text-3xl uppercase tracking-widest">JULIEN LEFEBVRE</h2>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 gap-x-8 gap-y-1 mt-6 px-8 relative">
+<div class="absolute left-1/2 top-0 bottom-0 w-[1px] bg-white/20"></div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-bold text-lg"><span>SPD</span> <span>85</span></div>
+<div class="flex justify-between font-bold text-lg"><span>SHO</span> <span>82</span></div>
+<div class="flex justify-between font-bold text-lg"><span>PAS</span> <span>89</span></div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-bold text-lg"><span>DRI</span> <span>91</span></div>
+<div class="flex justify-between font-bold text-lg"><span>DEF</span> <span>74</span></div>
+<div class="flex justify-between font-bold text-lg"><span>PHY</span> <span>80</span></div>
+</div>
+</div>
+<!-- Action Buttons (Integrated into Footer) -->
+<div class="mt-auto mb-12 flex flex-col gap-2 px-8">
+<button class="w-full bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold py-2 rounded uppercase text-sm transition-all border border-white/20">Envoyer un message</button>
+<button class="w-full bg-transparent hover:bg-white/5 text-white/80 font-bold py-2 rounded uppercase text-xs transition-all">Voir le profil</button>
+</div>
+</article>
+</div>
+</main>
+<!-- Footer Integration (Source: JSON) -->
+<footer class="bg-surface-container-high dark:bg-surface-container-highest w-full mt-auto">
+<div class="w-full py-12 px-margin-desktop max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+<div>
+<div class="font-headline-md text-headline-md font-bold text-primary mb-4">SportMate</div>
+<p class="text-on-surface-variant font-body-md text-body-md max-w-xs">La plateforme de référence pour les athlètes exigeants.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-4">
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Community</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Guidelines</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Privacy</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Terms</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Support</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:underline hover:text-primary transition-all" href="#">Careers</a>
+</div>
+</div>
+<div class="w-full py-6 px-margin-desktop max-w-[1280px] mx-auto border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="font-body-md text-body-md text-on-surface-variant opacity-70">© 2024 SportMate. All rights reserved.</span>
+<div class="flex gap-6">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">language</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">share</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for the card
+        document.querySelector('.player-card').addEventListener('mousemove', (e) => {
+            const card = e.currentTarget;
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Subtle lighting effect (not needed per strict minimalist rules, but nice touch)
+            // card.style.setProperty('--mouse-x', `${x}px`);
+            // card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    </script>
+</body></html>

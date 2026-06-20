@@ -11,7 +11,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "SportMeet - Plateforme Sportive",
+  title: "Wasportly - Plateforme Sportive",
   description: "Trouvez des partenaires de sport et organisez vos matchs en un clic.",
 };
 

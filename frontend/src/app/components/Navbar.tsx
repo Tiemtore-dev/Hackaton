@@ -51,7 +51,7 @@ export default function Navbar() {
     <header className="bg-brand-page shadow-sm sticky top-0 z-50 border-b border-brand-border/40">
       <nav className="flex justify-between items-center w-full px-4 md:px-[80px] max-w-[1280px] mx-auto h-16">
         <Link href="/" className="font-headline text-headline-md text-primary font-bold tracking-tight">
-          SportMate
+          Wasportly
         </Link>
         
         {/* Navigation Links */}

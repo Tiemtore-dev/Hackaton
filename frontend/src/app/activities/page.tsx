@@ -189,7 +189,7 @@ export default function Activities() {
       // Find user creator
       const userRes = await fetch(`${API_URL}/users/${createCreatorPhone}`);
       if (!userRes.ok) {
-        setErrorMsg("L'organisateur n'est pas enregistré sur SportMeet. Veuillez d'abord vous inscrire.");
+        setErrorMsg("L'organisateur n'est pas enregistré sur Wasportly. Veuillez d'abord vous inscrire.");
         setSubmitting(false);
         return;
       }
@@ -765,7 +765,7 @@ export default function Activities() {
             
             <form onSubmit={handleJoinMatchSubmit} className="space-y-4">
               <p className="text-xs text-brand-secondary leading-relaxed">
-                Afin de confirmer votre participation et de vous inscrire, veuillez renseigner le numéro WhatsApp lié à votre Carte Joueur SportMeet.
+                Afin de confirmer votre participation et de vous inscrire, veuillez renseigner le numéro WhatsApp lié à votre Carte Joueur Wasportly.
               </p>
               
               {joinError && <p className="text-red-600 text-xs font-semibold">⚠️ {joinError}</p>}

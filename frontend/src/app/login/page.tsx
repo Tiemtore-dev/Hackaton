@@ -146,7 +146,7 @@ export default function Login() {
             <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-1">
                 <h1 className="font-headline text-headline-md text-primary font-bold">Connexion</h1>
-                <p className="font-sans text-body-md text-on-surface-variant">Accédez à votre espace SportMeet.</p>
+                <p className="font-sans text-body-md text-on-surface-variant">Accédez à votre espace Wasportly.</p>
               </div>
 
               {loginError && (

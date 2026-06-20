@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="w-full py-12 px-4 md:px-20 max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
         <div className="flex flex-col max-w-xs text-center md:text-left">
           <div className="font-sans text-2xl font-extrabold text-brand-primary mb-3">
-            SportMate<span className="text-secondary">.</span>
+            Wasportly<span className="text-secondary">.</span>
           </div>
           <p className="text-brand-secondary text-[14px] leading-relaxed">
             Le réseau social n°1 pour trouver vos futurs partenaires de sport et organiser vos sessions en un clic.
@@ -41,7 +41,7 @@ export default function Footer() {
       
       <div className="w-full py-6 px-4 md:px-20 max-w-[1280px] mx-auto border-t border-brand-border/30 flex flex-col sm:flex-row justify-between items-center gap-4 relative">
         <span className="text-[12px] text-brand-secondary opacity-75">
-          © {new Date().getFullYear()} SportMate. All rights reserved.
+          © {new Date().getFullYear()} Wasportly. All rights reserved.
         </span>
         <button 
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

@@ -89,7 +89,7 @@ async def handle_match_response(db: AsyncSession, phone_number: str, button_payl
             if creator and creator.phone_number != phone_number:
                 await whatsapp_service.send_text_message(
                     to=creator.phone_number,
-                    text=f"🔔 *SportMeet* : {user.prenom} {user.nom} a rejoint ton match de {match.sport} !"
+                    text=f"🔔 *Wasportly* : {user.prenom} {user.nom} a rejoint ton match de {match.sport} !"
                 )
                 
     elif action == "match_decline":

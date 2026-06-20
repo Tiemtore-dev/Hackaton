@@ -3,7 +3,7 @@ from app.database import async_session_local
 import app.crud as crud
 from app.schemas import UserCreate
 
-mcp = FastMCP("SportMeet MCP Server")
+mcp = FastMCP("Wasportly MCP Server")
 
 @mcp.tool()
 async def get_player(phone_number: str) -> str:
@@ -17,7 +17,7 @@ async def get_player(phone_number: str) -> str:
         
         status_text = "Inscrit" if user.is_registered else "Inscription en cours"
         return (
-            f"👤 Carte Joueur SportMeet :\n"
+            f"👤 Carte Joueur Wasportly :\n"
             f"- Nom complet : {user.prenom} {user.nom}\n"
             f"- Téléphone : {user.phone_number}\n"
             f"- Âge : {user.age} ans\n"
@@ -32,7 +32,7 @@ async def get_player(phone_number: str) -> str:
 @mcp.tool()
 async def list_players() -> str:
     """
-    Retourne la liste complète de tous les joueurs de sport inscrits sur la plateforme SportMeet.
+    Retourne la liste complète de tous les joueurs de sport inscrits sur la plateforme Wasportly.
     """
     async with async_session_local() as db:
         users = await crud.get_users(db, skip=0, limit=100)
@@ -44,7 +44,7 @@ async def list_players() -> str:
             status_symbol = "🟢" if u.is_registered else "🟡"
             lines.append(f"{status_symbol} {u.prenom} {u.nom} ({u.phone_number}) - {u.niveau} | {u.quartier}, {u.ville}")
         
-        return "Liste des joueurs SportMeet :\n" + "\n".join(lines)
+        return "Liste des joueurs Wasportly :\n" + "\n".join(lines)
 
 @mcp.tool()
 async def register_player(
@@ -60,7 +60,7 @@ async def register_player(
     categorie: str
 ) -> str:
     """
-    Inscrit directement un nouveau joueur de sport sur SportMeet en remplissant toutes ses coordonnées.
+    Inscrit directement un nouveau joueur de sport sur Wasportly en remplissant toutes ses coordonnées.
     """
     async with async_session_local() as db:
         existing = await crud.get_user_by_phone_number(db, phone_number)
@@ -87,5 +87,5 @@ async def register_player(
         
         return (
             f"🎉 Le joueur {db_user.prenom} {db_user.nom} a été inscrit avec succès !\n"
-            f"Sa Carte Joueur unique est maintenant active sur SportMeet."
+            f"Sa Carte Joueur unique est maintenant active sur Wasportly."
         )

@@ -148,7 +148,7 @@ async def handle_whatsapp_message(
             elif input_text == "3" or input_text.lower() == "carte" or input_text == "menu_carte":
                 # Display player card details
                 card_text = (
-                    f"💳 *Votre Carte Joueur SportMeet* :\n\n"
+                    f"💳 *Votre Carte Joueur Wasportly* :\n\n"
                     f"👤 Nom complet : {user.prenom} {user.nom}\n"
                     f"🎂 Âge : {user.age} ans\n"
                     f"📏 Taille : {user.taille} cm\n"
@@ -164,7 +164,7 @@ async def handle_whatsapp_message(
             else:
                 # Send Main Menu
                 menu_text = (
-                    f"Salut {user.prenom} ! Bienvenue sur le menu principal SportMeet. 🏆\n\n"
+                    f"Salut {user.prenom} ! Bienvenue sur le menu principal Wasportly. 🏆\n\n"
                     "Que souhaitez-vous faire ?\n"
                     "1️⃣ *Organiser un match* ⚽\n"
                     "2️⃣ *Voir mes matchs programmés* 📅\n"
@@ -422,9 +422,9 @@ async def handle_whatsapp_message(
         await crud.create_or_update_registration_state(db, phone_number, "ASK_PRENOM", temp_data)
         
         welcome_text = (
-            "⚽ Bienvenue sur SportMeet ! 🏀\n\n"
-            "Je suis votre assistant SportMeet. Je vais vous aider à créer votre Carte Joueur en quelques instants pour vous mettre en relation avec d'autres sportifs près de chez vous.\n\n"
-            "Pour commencer, quel est votre *prénom* ?"
+            "⚽ *Bienvenue sur Wasportly !* 🏀\n\n"
+            "Je suis votre assistant Wasportly. Je vais vous aider à créer votre *Carte Joueur* en quelques instants pour vous mettre en relation avec d'autres sportifs près de chez vous.\n\n"
+            "Commençons dès maintenant ! Quel est votre *prénom* ? 😊"
         )
         await whatsapp_service.send_text_message(to=phone_number, text=welcome_text)
         return
@@ -617,7 +617,7 @@ async def handle_whatsapp_message(
         await crud.delete_registration_state(db, phone_number)
         
         success_message = (
-            "🎉 Félicitations ! Votre inscription sur SportMeet est terminée !\n\n"
+            "🎉 Félicitations ! Votre inscription sur Wasportly est terminée !\n\n"
             "Voici le récapitulatif de votre Carte Joueur 💳 :\n"
             f"👤 *Nom complet* : {db_user.prenom} {db_user.nom}\n"
             f"🎂 *Âge* : {db_user.age} ans\n"

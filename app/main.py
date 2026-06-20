@@ -27,8 +27,8 @@ async def lifespan(app: FastAPI):
     await engine.dispose()
 
 app = FastAPI(
-    title="SportMeet API",
-    description="Backend API supporting the SportMeet WhatsApp assistant and web platform.",
+    title="Wasportly API",
+    description="Backend API supporting the Wasportly WhatsApp assistant and web platform.",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -55,7 +55,7 @@ app.mount("/mcp", mcp.sse_app())
 @app.get("/")
 async def root():
     return {
-        "app": "SportMeet Backend",
+        "app": "Wasportly Backend",
         "status": "healthy",
         "version": "1.0.0",
         "docs_url": "/docs"

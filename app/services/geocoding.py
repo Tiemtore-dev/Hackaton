@@ -65,7 +65,7 @@ async def parse_location(url_or_coords: str) -> dict | None:
         
     # 2. Reverse Geocoding avec Nominatim (OpenStreetMap)
     geocoding_url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lng}&format=json&accept-language=fr"
-    headers = {"User-Agent": "SportMeetApp/1.0 (contact@sportmeet.com)"}
+    headers = {"User-Agent": "WasportlyApp/1.0 (contact@wasportly.com)"}
     
     try:
         async with httpx.AsyncClient() as client:

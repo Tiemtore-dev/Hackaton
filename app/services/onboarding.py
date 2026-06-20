@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.services.whatsapp import whatsapp_service
+from app.config import settings
 import app.crud as crud
 from app.schemas import UserCreate, VenueCreate
 from app.models import Venue, Match, MatchParticipant
@@ -320,7 +321,7 @@ async def handle_whatsapp_message(
                     f"🏆 Catégorie : {user.categorie}\n"
                     f"⚽ Sport préféré : {user.sport_prefere}\n"
                     f"📍 Localisation : {user.quartier}, {user.ville}\n"
-                    f"🔗 Visualiser sur le Web : http://localhost:3000/?phone={user.phone_number}"
+                    f"🔗 Visualiser sur le Web : {settings.FRONTEND_URL}/?phone={user.phone_number}"
                 )
                 await whatsapp_service.send_text_message(to=phone_number, text=card_text)
                 return

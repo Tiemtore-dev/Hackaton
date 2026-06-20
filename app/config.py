@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     WHATSAPP_API_TOKEN: str = "fake_token_for_now"
     WHATSAPP_PHONE_NUMBER_ID: str = "fake_phone_number_id"
     WHATSAPP_VERSION: str = "v19.0"
+    FRONTEND_URL: str = "http://localhost:3000"
 
     model_config = SettingsConfigDict(
         env_file=".env",

@@ -4,7 +4,13 @@ from sqlalchemy.orm import declarative_base
 from app.config import settings
 
 # Create async engine
-engine = create_async_engine(settings.DATABASE_URL, echo=False)
+db_url = settings.DATABASE_URL
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+elif db_url.startswith("postgresql://"):
+    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+engine = create_async_engine(db_url, echo=False)
 
 # Sessionmaker for async sessions
 async_session_local = async_sessionmaker(

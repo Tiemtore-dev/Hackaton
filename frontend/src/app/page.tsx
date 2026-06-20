@@ -26,6 +26,7 @@ interface Venue {
   address: string;
   city: string;
   neighborhood: string;
+  google_maps_url?: string;
 }
 
 interface MatchParticipant {
@@ -44,6 +45,8 @@ interface Match {
   status: string;
   venue?: Venue;
   participants?: MatchParticipant[];
+  is_paid?: boolean;
+  price?: number;
 }
 
 export default function Discover() {
@@ -368,8 +371,17 @@ export default function Discover() {
                     </div>
                     <div className="p-5 flex-grow flex flex-col justify-between">
                       <div>
-                        <h3 className="font-bold text-base text-brand-primary mb-1">Match de {match.sport}</h3>
-                        <p className="text-xs text-brand-secondary flex items-center gap-1 mb-4">
+                        <div className="flex justify-between items-center mb-1 gap-2">
+                          <h3 className="font-bold text-base text-brand-primary truncate">Match de {match.sport}</h3>
+                          <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border uppercase tracking-wider shrink-0 ${
+                            match.is_paid 
+                              ? "bg-amber-500/10 text-amber-600 border-amber-550/20" 
+                              : "bg-[#2D6A4D]/10 text-[#2D6A4D] border-[#2D6A4D]/20"
+                          }`}>
+                            {match.is_paid ? `${match.price} FCFA` : "Gratuit"}
+                          </span>
+                        </div>
+                        <p className="text-xs text-brand-secondary flex items-center gap-1 mb-4 truncate">
                           <span className="material-symbols-outlined text-sm">location_on</span>
                           {match.venue?.name || "Terrain de jeu"}, {match.venue?.neighborhood || "Abidjan"}
                         </p>

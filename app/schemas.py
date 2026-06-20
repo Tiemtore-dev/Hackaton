@@ -53,6 +53,7 @@ class VenueBase(BaseModel):
     neighborhood: str
     latitude: float | None = None
     longitude: float | None = None
+    google_maps_url: str | None = None
 
 
 class VenueCreate(VenueBase):
@@ -71,6 +72,8 @@ class MatchBase(BaseModel):
     match_time: datetime
     venue_id: UUID
     max_players: int = 10
+    is_paid: bool = False
+    price: float | None = None
 
 
 class MatchCreate(MatchBase):

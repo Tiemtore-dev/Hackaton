@@ -50,6 +50,7 @@ class Venue(Base):
     neighborhood: Mapped[str] = mapped_column(String(100), nullable=False)
     latitude: Mapped[float | None] = mapped_column(nullable=True)
     longitude: Mapped[float | None] = mapped_column(nullable=True)
+    google_maps_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     # Relationships
     matches = relationship("Match", back_populates="venue")
@@ -66,6 +67,8 @@ class Match(Base):
     max_players: Mapped[int] = mapped_column(Integer, default=10, nullable=False)
     status: Mapped[str] = mapped_column(String(50), default="pending", nullable=False) # pending, completed, cancelled
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
+    is_paid: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    price: Mapped[float | None] = mapped_column(nullable=True)
 
     # Relationships
     creator = relationship("User", back_populates="matches_created")

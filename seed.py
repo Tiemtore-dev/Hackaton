@@ -23,19 +23,22 @@ async def seed_database():
             name="Agora de Koumassi",
             address="Boulevard du 7 Décembre",
             city="Abidjan",
-            neighborhood="Koumassi"
+            neighborhood="Koumassi",
+            google_maps_url="https://maps.app.goo.gl/9r97g1W6Z7V4P3Y58"
         )
         v2_in = VenueCreate(
             name="City Sport Cocody",
             address="Rue des Jardins",
             city="Abidjan",
-            neighborhood="Cocody"
+            neighborhood="Cocody",
+            google_maps_url="https://maps.app.goo.gl/F2z6L3N7X7D8H9J12"
         )
         v3_in = VenueCreate(
             name="Stade de Marcory",
             address="Avenue de la Paix",
             city="Abidjan",
-            neighborhood="Marcory"
+            neighborhood="Marcory",
+            google_maps_url=None
         )
         
         v1 = await crud.create_venue(db, v1_in)
@@ -163,7 +166,9 @@ async def seed_database():
             match_time=m1_time,
             venue_id=v1.id,
             max_players=4,
-            status="pending"
+            status="pending",
+            is_paid=True,
+            price=2500.0
         ))
         
         # Match 2: Football au City Sport Cocody (Créé par Marie u3)
@@ -174,7 +179,9 @@ async def seed_database():
             match_time=m2_time,
             venue_id=v2.id,
             max_players=10,
-            status="pending"
+            status="pending",
+            is_paid=False,
+            price=0.0
         ))
         
         db.add(m1)

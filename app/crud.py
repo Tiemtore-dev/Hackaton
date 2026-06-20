@@ -192,6 +192,7 @@ async def create_venue(db: AsyncSession, venue: VenueCreate) -> Venue:
         neighborhood=venue.neighborhood,
         latitude=venue.latitude,
         longitude=venue.longitude,
+        google_maps_url=venue.google_maps_url,
     )
     db.add(db_venue)
     await db.commit()
@@ -219,6 +220,8 @@ async def create_match(db: AsyncSession, match: MatchCreate) -> Match:
         venue_id=match.venue_id,
         max_players=match.max_players,
         status="pending",
+        is_paid=match.is_paid,
+        price=match.price,
     )
     db.add(db_match)
     await db.commit()

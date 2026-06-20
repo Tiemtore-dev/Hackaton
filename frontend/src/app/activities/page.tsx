@@ -13,6 +13,7 @@ interface Venue {
   neighborhood: string;
   latitude?: number;
   longitude?: number;
+  google_maps_url?: string;
 }
 
 interface User {
@@ -42,6 +43,8 @@ interface Match {
   status: string;
   venue?: Venue;
   participants?: MatchParticipant[];
+  is_paid?: boolean;
+  price?: number;
 }
 
 export default function Activities() {
@@ -66,6 +69,8 @@ export default function Activities() {
   const [createVenueId, setCreateVenueId] = useState("");
   const [createMaxPlayers, setCreateMaxPlayers] = useState(10);
   const [createCreatorPhone, setCreateCreatorPhone] = useState("");
+  const [createIsPaid, setCreateIsPaid] = useState(false);
+  const [createPrice, setCreatePrice] = useState("");
   const [newVenueName, setNewVenueName] = useState("");
   const [newVenueAddress, setNewVenueAddress] = useState("");
   const [newVenueNeighborhood, setNewVenueNeighborhood] = useState("");
@@ -211,7 +216,8 @@ export default function Activities() {
           city: "Abidjan",
           neighborhood: newVenueNeighborhood,
           latitude: newVenueLatitude ? parseFloat(newVenueLatitude) : null,
-          longitude: newVenueLongitude ? parseFloat(newVenueLongitude) : null
+          longitude: newVenueLongitude ? parseFloat(newVenueLongitude) : null,
+          google_maps_url: locationInput.trim() || null
         };
 
         const venueRes = await fetch(`${API_URL}/venues`, {
@@ -242,7 +248,9 @@ export default function Activities() {
         match_time: new Date(createMatchTime).toISOString(),
         venue_id: finalVenueId,
         max_players: createMaxPlayers,
-        creator_id: creatorId
+        creator_id: creatorId,
+        is_paid: createIsPaid,
+        price: createIsPaid ? parseFloat(createPrice) : 0.0
       };
 
       const matchRes = await fetch(`${API_URL}/matches`, {
@@ -260,6 +268,9 @@ export default function Activities() {
       // Reset & Reload
       setShowCreateModal(false);
       setCreateMatchTime("");
+      setCreateIsPaid(false);
+      setCreatePrice("");
+      setLocationInput("");
       setNewVenueName("");
       setNewVenueAddress("");
       setNewVenueNeighborhood("");
@@ -464,12 +475,14 @@ export default function Activities() {
 
               {/* Card Details */}
               <div className="p-6 flex flex-col flex-grow bg-brand-card">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-headline-md text-headline-md text-brand-primary leading-tight">
+                <div className="flex justify-between items-start mb-2 gap-2">
+                  <h3 className="font-headline-md text-headline-md text-brand-primary leading-tight truncate">
                     Match de {match.sport}
                   </h3>
-                  <span className="text-green-accent font-bold text-caption">
-                    GRATUIT
+                  <span className={`font-bold text-caption uppercase tracking-wider shrink-0 ${
+                    match.is_paid ? "text-amber-600" : "text-green-accent"
+                  }`}>
+                    {match.is_paid ? `${match.price} FCFA` : "GRATUIT"}
                   </span>
                 </div>
 
@@ -608,6 +621,34 @@ export default function Activities() {
                   onChange={(e) => setCreateCreatorPhone(e.target.value)}
                   required
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-caption font-bold text-brand-primary uppercase tracking-wider">Type d'activité</label>
+                  <select
+                    value={createIsPaid ? "paid" : "free"}
+                    onChange={(e) => setCreateIsPaid(e.target.value === "paid")}
+                    className="w-full bg-brand-page/50 border border-brand-border focus:border-navy-primary focus:ring-1 focus:ring-navy-primary rounded-lg px-4 py-2.5 text-body-md outline-none transition-all text-brand-primary font-semibold"
+                  >
+                    <option value="free">🟢 Gratuit</option>
+                    <option value="paid">💸 Payant</option>
+                  </select>
+                </div>
+                {createIsPaid && (
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-caption font-bold text-brand-primary uppercase tracking-wider">Prix par joueur (FCFA)</label>
+                    <input
+                      type="number"
+                      placeholder="Ex: 2500"
+                      className="w-full bg-brand-page/50 border border-brand-border focus:border-navy-primary focus:ring-1 focus:ring-navy-primary rounded-lg px-4 py-2.5 text-body-md outline-none transition-all text-brand-primary font-semibold"
+                      value={createPrice}
+                      onChange={(e) => setCreatePrice(e.target.value)}
+                      required={createIsPaid}
+                      min={0}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-1.5">

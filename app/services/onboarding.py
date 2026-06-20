@@ -10,6 +10,7 @@ import app.crud as crud
 from app.schemas import UserCreate, VenueCreate
 from app.models import Venue, Match, MatchParticipant
 from app.services.matching import run_matchmaking_for_match
+from app.services.geocoding import parse_location
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +50,36 @@ def parse_neighborhood(address: str, default_neighborhood: str) -> str:
         if n.lower() in address_lower:
             return n
     return default_neighborhood
+
+
+async def send_match_confirmation_prompt(db: AsyncSession, phone_number: str, temp_data: dict) -> None:
+    sport = temp_data.get("sport")
+    dt_parsed = datetime.fromisoformat(temp_data.get("match_time"))
+    date_str = dt_parsed.strftime("%d/%m/%Y à %Hh%M")
+    venue_name = temp_data.get("venue_name")
+    max_players = temp_data.get("max_players")
+    is_paid = temp_data.get("is_paid", False)
+    price = temp_data.get("price", 0.0)
+    
+    price_text = f"Payant ({int(price)} FCFA) 💸" if is_paid else "Gratuit 🟢"
+    
+    confirm_text = (
+        f"⚽ *Résumé du Match à Créer :*\n\n"
+        f"- Sport : *{sport}*\n"
+        f"- Date : *{date_str}*\n"
+        f"- Terrain : *{venue_name}*\n"
+        f"- Joueurs max : *{max_players}*\n"
+        f"- Tarif : *{price_text}*\n\n"
+        f"Souhaitez-vous valider et envoyer les invitations WhatsApp ?"
+    )
+    await whatsapp_service.send_interactive_buttons(
+        to=phone_number,
+        text=confirm_text,
+        buttons=[
+            {"id": "match_confirm_yes", "title": "Confirmer"},
+            {"id": "match_confirm_cancel", "title": "Annuler"}
+        ]
+    )
 
 
 async def handle_whatsapp_message(
@@ -105,8 +136,9 @@ async def handle_whatsapp_message(
                         date_str = match_details.match_time.strftime("%d/%m à %Hh%M")
                         venue_name = match_details.venue.name if match_details.venue else "Terrain inconnu"
                         status_emoji = "🟢" if part.status == "confirmed" else "🟡" if part.status == "waitlist" else "🔵"
+                        price_text = f"{int(match_details.price)} FCFA" if match_details.is_paid else "Gratuit"
                         lines.append(
-                            f"- {status_emoji} *{match_details.sport}* le {date_str}\n"
+                            f"- {status_emoji} *{match_details.sport}* le {date_str} ({price_text})\n"
                             f"  📍 {venue_name} ({part.status})"
                         )
                 
@@ -217,25 +249,50 @@ async def handle_whatsapp_message(
                     await whatsapp_service.send_text_message(to=phone_number, text="Entrez le nom du terrain ou partagez la position GPS :")
                     return
                 
-                # Look up existing venue matching text
-                stmt = select(Venue).where(Venue.name.ilike(input_text))
-                res = await db.execute(stmt)
-                existing_venue = res.scalars().first()
+                # Check if it's a Google Maps link or coordinates string
+                is_url_or_coords = "http" in input_text or re.match(r"^\s*(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$", input_text)
+                parsed = None
+                if is_url_or_coords:
+                    parsed = await parse_location(input_text)
                 
-                if existing_venue:
-                    temp_data["venue_id"] = str(existing_venue.id)
-                    temp_data["venue_name"] = existing_venue.name
-                else:
-                    # Create new Venue based on typed text
+                if parsed:
+                    # Create a new venue from parsed maps link
                     venue_in = VenueCreate(
-                        name=input_text,
-                        address=input_text,
-                        city=user.ville or "Abidjan",
-                        neighborhood=user.quartier or "Cocody"
+                        name=parsed["name"],
+                        address=parsed["address"],
+                        city=parsed["city"],
+                        neighborhood=parsed["neighborhood"],
+                        latitude=parsed["latitude"],
+                        longitude=parsed["longitude"],
+                        google_maps_url=parsed["google_maps_url"]
                     )
                     venue = await crud.create_venue(db, venue_in)
                     temp_data["venue_id"] = str(venue.id)
-                    temp_data["venue_name"] = venue.name
+                    temp_data["venue_name"] = f"{venue.name} ({venue.neighborhood})"
+                    await whatsapp_service.send_text_message(
+                        to=phone_number,
+                        text=f"📍 Lien Google Maps ou coordonnées GPS analysés ! Terrain enregistré : *{venue.name}* ({venue.neighborhood}, {venue.city}) !"
+                    )
+                else:
+                    # Look up existing venue matching text
+                    stmt = select(Venue).where(Venue.name.ilike(input_text))
+                    res = await db.execute(stmt)
+                    existing_venue = res.scalars().first()
+                    
+                    if existing_venue:
+                        temp_data["venue_id"] = str(existing_venue.id)
+                        temp_data["venue_name"] = existing_venue.name
+                    else:
+                        # Create new Venue based on typed text
+                        venue_in = VenueCreate(
+                            name=input_text,
+                            address=input_text,
+                            city=user.ville or "Abidjan",
+                            neighborhood=user.quartier or "Cocody"
+                        )
+                        venue = await crud.create_venue(db, venue_in)
+                        temp_data["venue_id"] = str(venue.id)
+                        temp_data["venue_name"] = venue.name
             
             await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_PLAYERS", temp_data)
             await whatsapp_service.send_text_message(
@@ -254,30 +311,65 @@ async def handle_whatsapp_message(
                 return
                 
             temp_data["max_players"] = max_players
-            await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_CONFIRM", temp_data)
-            
-            # Format confirmation message
-            sport = temp_data.get("sport")
-            dt_parsed = datetime.fromisoformat(temp_data.get("match_time"))
-            date_str = dt_parsed.strftime("%d/%m/%Y à %Hh%M")
-            venue_name = temp_data.get("venue_name")
-            
-            confirm_text = (
-                f"⚽ *Résumé du Match à Créer :*\n\n"
-                f"- Sport : *{sport}*\n"
-                f"- Date : *{date_str}*\n"
-                f"- Terrain : *{venue_name}*\n"
-                f"- Joueurs max : *{max_players}*\n\n"
-                f"Souhaitez-vous valider et envoyer les invitations WhatsApp ?"
-            )
+            await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_PAYMENT_TYPE", temp_data)
             await whatsapp_service.send_interactive_buttons(
                 to=phone_number,
-                text=confirm_text,
+                text="Est-ce que ce match est gratuit ou payant ? 💸",
                 buttons=[
-                    {"id": "match_confirm_yes", "title": "Confirmer"},
-                    {"id": "match_confirm_cancel", "title": "Annuler"}
+                    {"id": "pay_free", "title": "Gratuit"},
+                    {"id": "pay_paid", "title": "Payant"}
                 ]
             )
+            return
+
+        elif current_step == "CREATE_MATCH_PAYMENT_TYPE":
+            val = input_text.lower()
+            if val in ["pay_free", "gratuit", "free"]:
+                temp_data["is_paid"] = False
+                temp_data["price"] = 0.0
+                await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_CONFIRM", temp_data)
+                await send_match_confirmation_prompt(db, phone_number, temp_data)
+                return
+            elif val in ["pay_paid", "payant", "paid"]:
+                temp_data["is_paid"] = True
+                await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_PRICE", temp_data)
+                await whatsapp_service.send_text_message(
+                    to=phone_number,
+                    text="Quel est le prix/tarif par joueur pour ce match (en FCFA, ex: 1500) ? 💸"
+                )
+                return
+            else:
+                await whatsapp_service.send_interactive_buttons(
+                    to=phone_number,
+                    text="Veuillez choisir une option en utilisant les boutons ou en écrivant 'Gratuit' ou 'Payant' :",
+                    buttons=[
+                        {"id": "pay_free", "title": "Gratuit"},
+                        {"id": "pay_paid", "title": "Payant"}
+                    ]
+                )
+                return
+
+        elif current_step == "CREATE_MATCH_PRICE":
+            if not input_text:
+                await whatsapp_service.send_text_message(
+                    to=phone_number,
+                    text="Veuillez entrer le prix par joueur (ex: 1500) :"
+                )
+                return
+            cleaned = "".join(c for c in input_text if c.isdigit())
+            try:
+                price = float(cleaned)
+                if price < 0:
+                    raise ValueError()
+            except ValueError:
+                await whatsapp_service.send_text_message(
+                    to=phone_number,
+                    text="Veuillez saisir un tarif valide (un nombre supérieur ou égal à 0, ex: 1500) :"
+                )
+                return
+            temp_data["price"] = price
+            await crud.create_or_update_registration_state(db, phone_number, "CREATE_MATCH_CONFIRM", temp_data)
+            await send_match_confirmation_prompt(db, phone_number, temp_data)
             return
             
         elif current_step == "CREATE_MATCH_CONFIRM":
@@ -294,7 +386,9 @@ async def handle_whatsapp_message(
                     match_time=dt,
                     venue_id=vid,
                     max_players=max_p,
-                    status="pending"
+                    status="pending",
+                    is_paid=temp_data.get("is_paid", False),
+                    price=temp_data.get("price", 0.0)
                 )
                 db.add(db_match)
                 await db.commit()

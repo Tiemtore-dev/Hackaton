@@ -53,11 +53,13 @@ async def run_matchmaking_for_match(db: AsyncSession, match_id: uuid.UUID) -> in
         await crud.add_match_participant(db, match.id, player.id, "invited")
         
         # 4. Envoyer l'invitation interactive via WhatsApp
+        price_text = f"{int(match.price)} FCFA" if match.is_paid else "Gratuit"
         invitation_text = (
             f"⚽ *Opportunité de Match !* 🏀\n\n"
             f"Salut {player.prenom} ! Une partie de *{match.sport}* de niveau *{player.niveau}* s'organise dans ton quartier !\n\n"
             f"📍 *Terrain* : {venue.name} ({venue.neighborhood})\n"
-            f"📅 *Date* : {date_str}\n\n"
+            f"📅 *Date* : {date_str}\n"
+            f"💸 *Tarif* : *{price_text}*\n\n"
             f"Il reste des places. Souhaites-tu rejoindre la partie ?"
         )
         

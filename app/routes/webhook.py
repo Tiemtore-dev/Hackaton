@@ -79,9 +79,17 @@ async def handle_match_response(db: AsyncSession, phone_number: str, button_payl
             await db.commit()
             
             date_str = match.match_time.strftime("%d/%m/%Y à %Hh%M")
+            price_text = f"{int(match.price)} FCFA" if match.is_paid else "Gratuit"
+            maps_link = f"\n📍 *Lien Maps* : {venue.google_maps_url}" if (venue and venue.google_maps_url) else ""
+            
             await whatsapp_service.send_text_message(
                 to=phone_number,
-                text=f"C'est confirmé ! Ta place est réservée pour le match de *{match.sport}* le {date_str} au terrain *{venue_name}*. À très vite ! 🟢"
+                text=(
+                    f"C'est confirmé ! Ta place est réservée pour le match de *{match.sport}* le {date_str}.\n"
+                    f"🏟️ *Terrain* : {venue_name} ({venue.neighborhood}){maps_link}\n"
+                    f"💸 *Tarif* : *{price_text}*\n\n"
+                    f"À très vite ! 🟢"
+                )
             )
             
             # Notifier le créateur du match

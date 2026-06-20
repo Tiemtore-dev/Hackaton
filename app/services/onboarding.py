@@ -15,8 +15,42 @@ from app.services.geocoding import parse_location
 logger = logging.getLogger(__name__)
 
 # Helpers
+def parse_hour_helper(text_lower: str) -> tuple[int, int]:
+    hour = 18
+    minute = 0
+    # Pattern 1: 19h30 or 19h
+    m_hour = re.search(r"(\d{1,2})h(\d{2})?", text_lower)
+    if m_hour:
+        try:
+            hour = int(m_hour.group(1))
+            if m_hour.group(2):
+                minute = int(m_hour.group(2))
+            return hour, minute
+        except ValueError:
+            pass
+    # Pattern 2: 19:30
+    m_colon = re.search(r"(\d{1,2}):(\d{2})", text_lower)
+    if m_colon:
+        try:
+            return int(m_colon.group(1)), int(m_colon.group(2))
+        except ValueError:
+            pass
+    # Pattern 3: simple number like "à 19"
+    m_simple = re.search(r"(?:à|@|a)?\s*(\d{1,2})\s*(?:heures?|hrs?)?", text_lower)
+    if m_simple:
+        try:
+            val = int(m_simple.group(1))
+            if 0 <= val <= 23:
+                return val, 0
+        except ValueError:
+            pass
+    return hour, minute
+
+
 def parse_date_input(text: str) -> datetime:
     text = text.strip()
+    text_lower = text.lower()
+    
     # Check DD/MM/YYYY HH:MM
     m1 = re.search(r"(\d{1,2})/(\d{1,2})/(\d{4})\s+(\d{1,2})h?(\d{2})?", text)
     if m1:
@@ -26,6 +60,7 @@ def parse_date_input(text: str) -> datetime:
             return datetime(int(year), int(month), int(day), int(hour), int(minute))
         except ValueError:
             pass
+            
     # Check DD/MM HH:MM or DD/MM à HHhMM
     m2 = re.search(r"(\d{1,2})/(\d{1,2})\s*(?:à|@|a)?\s*(\d{1,2})h?(\d{2})?", text, re.IGNORECASE)
     if m2:
@@ -39,6 +74,46 @@ def parse_date_input(text: str) -> datetime:
             return dt
         except ValueError:
             pass
+
+    # Check for "demain"
+    if "demain" in text_lower:
+        now = datetime.now()
+        target_date = now + timedelta(days=1)
+        hour, minute = parse_hour_helper(text_lower)
+        return target_date.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
+    # Check for "ce soir" or "aujourd'hui"
+    if "ce soir" in text_lower or "aujourd" in text_lower:
+        now = datetime.now()
+        hour, minute = parse_hour_helper(text_lower)
+        return now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
+    # Check for weekday name (lundi, mardi, etc.)
+    weekdays = {
+        "lundi": 0,
+        "mardi": 1,
+        "mercredi": 2,
+        "jeudi": 3,
+        "vendredi": 4,
+        "samedi": 5,
+        "dimanche": 6
+    }
+    
+    day_num = None
+    for name, num in weekdays.items():
+        if name in text_lower:
+            day_num = num
+            break
+            
+    if day_num is not None:
+        now = datetime.now()
+        days_ahead = day_num - now.weekday()
+        if days_ahead <= 0:
+            days_ahead += 7
+        target_date = now + timedelta(days=days_ahead)
+        hour, minute = parse_hour_helper(text_lower)
+        return target_date.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
     # Fallback: tomorrow at 18:00
     return datetime.now().replace(hour=18, minute=0, second=0, microsecond=0) + timedelta(days=1)
 

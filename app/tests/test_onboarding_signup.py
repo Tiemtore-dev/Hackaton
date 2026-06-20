@@ -137,5 +137,37 @@ async def run_onboarding_signup_test():
             assert crud.verify_password("mypassword123", user.hashed_password) is True, "Le mot de passe devrait être correct"
             print("🎉 L'utilisateur a été créé avec succès, avec le mot de passe hashé !")
 
+        # 14. Delete account test
+        print("\n💬 14. User sends 'supprimer mon compte'...")
+        resp = await ac.post("/webhook", json=generate_text_payload(sender, "supprimer mon compte"))
+        assert resp.status_code == 200
+
+        # Verify account was deleted in DB
+        async with async_session_local() as db:
+            user = await crud.get_user_by_phone_number(db, sender)
+            assert user is None, "L'utilisateur devrait avoir été supprimé de la base de données"
+            print("🎉 L'utilisateur a été supprimé avec succès !")
+
+        # 15. Start onboarding again & test 'annuler'
+        print("\n💬 15. User sends 'Hello' to restart onboarding...")
+        resp = await ac.post("/webhook", json=generate_text_payload(sender, "Hello"))
+        assert resp.status_code == 200
+
+        print("💬 16. User sends Prenom 'Fahim'...")
+        resp = await ac.post("/webhook", json=generate_text_payload(sender, "Fahim"))
+        assert resp.status_code == 200
+
+        print("💬 17. User sends 'annuler' to cancel onboarding...")
+        resp = await ac.post("/webhook", json=generate_text_payload(sender, "annuler"))
+        assert resp.status_code == 200
+
+        # Verify state is deleted and user is deleted in DB
+        async with async_session_local() as db:
+            state = await crud.get_registration_state(db, sender)
+            assert state is None, "L'état d'inscription devrait être supprimé"
+            user = await crud.get_user_by_phone_number(db, sender)
+            assert user is None, "L'utilisateur temporaire devrait être supprimé de la base de données"
+            print("🎉 L'onboarding a été annulé et réinitialisé avec succès !")
+
 if __name__ == "__main__":
     asyncio.run(run_onboarding_signup_test())

@@ -251,6 +251,28 @@ async def handle_whatsapp_message(
     # Clean input
     input_text = (button_payload or message_body or "").strip()
     
+    # 3. Check for helper reset/delete commands (highly useful for testing onboarding)
+    if input_text.lower() in ["supprimer mon compte", "supprimer mon profil", "delete my account", "delete my profile"]:
+        if user:
+            await crud.delete_user(db, user.id)
+        await crud.delete_registration_state(db, phone_number)
+        await whatsapp_service.send_text_message(
+            to=phone_number,
+            text="🗑️ Votre compte et vos données ont été supprimés de la base de données. Vous pouvez maintenant recommencer l'inscription à zéro en envoyant n'importe quel message !"
+        )
+        return
+        
+    if input_text.lower() in ["annuler", "reset", "recommencer"] and state:
+        # If they are in the middle of signup onboarding (non-registered user)
+        if user and not user.is_registered:
+            await crud.delete_user(db, user.id)
+        await crud.delete_registration_state(db, phone_number)
+        await whatsapp_service.send_text_message(
+            to=phone_number,
+            text="🔄 Inscription réinitialisée. Envoyez n'importe quel message pour recommencer depuis le début !"
+        )
+        return
+
     # CASE A: User is already registered
     if user and user.is_registered:
         # If there is no active creation/registration state

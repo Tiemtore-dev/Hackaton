@@ -180,6 +180,10 @@ async def receive_webhook(request: Request, db: AsyncSession = Depends(get_db)):
                             button_reply = interactive.get("button_reply", {})
                             button_payload = button_reply.get("id")
                             message_body = button_reply.get("title", "")
+                        elif interactive_type == "list_reply":
+                            list_reply = interactive.get("list_reply", {})
+                            button_payload = list_reply.get("id")
+                            message_body = list_reply.get("title", "")
                     elif message_type == "location":
                         loc = message.get("location", {})
                         location_data = {

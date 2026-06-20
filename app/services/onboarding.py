@@ -831,6 +831,22 @@ async def handle_whatsapp_message(
         }
         sport = sport_map.get(input_text.lower(), input_text.capitalize())
         temp_data["sport_prefere"] = sport
+        await crud.create_or_update_registration_state(db, phone_number, "ASK_PASSWORD", temp_data)
+        await whatsapp_service.send_text_message(
+            to=phone_number,
+            text="Pour finir, choisissez un mot de passe pour vous connecter à votre espace sur le site web Wasportly (minimum 6 caractères) : 🔐"
+        )
+        return
+
+    elif current_step == "ASK_PASSWORD":
+        if not input_text or len(input_text) < 6:
+            await whatsapp_service.send_text_message(
+                to=phone_number,
+                text="⚠️ Le mot de passe doit faire au moins 6 caractères. Veuillez en choisir un autre :"
+            )
+            return
+            
+        temp_data["password"] = input_text
 
         # Complete Registration!
         user_in = UserCreate(
@@ -845,6 +861,7 @@ async def handle_whatsapp_message(
             taille=temp_data.get("taille"),
             categorie=temp_data.get("categorie"),
             sport_prefere=temp_data.get("sport_prefere"),
+            password=temp_data.get("password")
         )
         
         db_user = await crud.create_user(db, user_in)
@@ -863,7 +880,7 @@ async def handle_whatsapp_message(
             f"🏆 *Catégorie* : {db_user.categorie}\n"
             f"⚽ *Sport préféré* : {db_user.sport_prefere}\n"
             f"📍 *Localisation* : {db_user.quartier}, {db_user.ville}\n"
-            f"🌐 *Langue* : {db_user.langue.upper()}\n\n"
+            f"🌐 *Langue* : {db_user.langue}\n\n"
             "Votre profil est maintenant actif ! Tapez *menu* ou n'importe quel message pour voir le menu des fonctionnalités. 🚀"
         )
         await whatsapp_service.send_text_message(to=phone_number, text=success_message)
